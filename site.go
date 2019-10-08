@@ -28,7 +28,7 @@ type Ephemeris struct {
 	// CommentFiles holds the filenames of comments we've found.
 	CommentFiles []string
 
-	// Prefix is the absolute prefix for the blog
+	// Prefix is the absolute URL prefix for the blog
 	Prefix string
 }
 
