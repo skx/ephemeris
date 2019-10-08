@@ -1,33 +1,15 @@
 package ephemeris
 
 import (
-	"crypto/md5"
 	"fmt"
-	"io/ioutil"
 	"regexp"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/shurcooL/github_flavored_markdown"
+	"github.com/skx/headerfile"
 )
-
-// BlogComment is the comment associated with a blog post.
-type BlogComment struct {
-
-	// Author holds the name of the comment-submitter
-	Author string
-
-	// Body holds the body of the comment.
-	Body string
-
-	// Icon is generated from the email-address of the submitter.
-	// This will point to a  gravitar link.
-	Icon string
-
-	// Link holds any user-submitted URL.
-	Link string
-}
 
 // BlogEntry holds a single post.
 //
@@ -73,105 +55,68 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 	// The structure we'll return
 	var result BlogEntry
 
-	// Read the file
-	bytes, err := ioutil.ReadFile(path)
-	if err != nil {
-		return result, err
-	}
-
-	// Split by newlines - because we want to process the header
-	// specially, splitting it into fields.
-	lines := strings.Split(string(bytes), "\n")
-
-	// We'll process the header, and append the body here
-	body := ""
-
-	// We start off in the header
-	header := true
+	// Create a helper to read the entry.
+	reader := headerfile.New(path)
 
 	// Blog-posts might have `format: markdown`.  If not they'll
 	// be treated as HTML.
 	markdown := false
 
-	// Compile a regular expression to save redoing this for
-	// each header-line
-	headerRegex, rErr := regexp.Compile("^([^:]+):(.*)$")
-	if rErr != nil {
-		return result, rErr
+	// Read the headers from the post
+	headers, err := reader.Headers()
+	if err != nil {
+		return result, err
 	}
 
-	// Process each line
-	for _, line := range lines {
+	// Read the body from the post
+	body := ""
+	body, err = reader.Body()
+	if err != nil {
+		return result, err
+	}
 
-		// If we're in the header ..
-		if header {
+	// Sanity-check the headers
+	for key, val := range headers {
 
-			// Empty line?  Then header-time is over now.
-			if len(line) < 1 {
-				header = false
-				continue
+		// Now process known-good keys
+		switch key {
+		case "date":
+			t, err := time.Parse("02/01/2006 15:04", val)
+			if err != nil {
+				return result, err
 			}
+			result.Date = t
 
-			// Find the key + value which we expect to see
-			// in the header.
-			header := headerRegex.FindStringSubmatch(line)
+			//
+			// These fields are calcuated
+			// solely to simplify the construction
+			// of the archive-pages.
+			//
+			_, m, _ := t.Date()
+			result.MonthName = m.String()
+			result.Month = fmt.Sprintf("%02d", int(m))
+			result.Year = fmt.Sprintf("%v", t.Year())
 
-			// If we did then we're good.
-			if len(header) == 3 {
-
-				// Save the key + value
-				key := header[1]
-				val := header[2]
-
-				// Normalize keys & values.
-				key = strings.ToLower(key)
-				val = strings.TrimSpace(val)
-
-				// Now process known-good keys
-				switch key {
-				case "date":
-					t, err := time.Parse("02/01/2006 15:04", val)
-					if err != nil {
-						return result, err
-					}
-					result.Date = t
-
-					//
-					// These fields are calcuated
-					// solely to simplify the construction
-					// of the archive-pages.
-					//
-					_, m, _ := t.Date()
-					result.MonthName = m.String()
-					result.Month = fmt.Sprintf("%02d", int(m))
-					result.Year = fmt.Sprintf("%v", t.Year())
-
-				case "title", "subject":
-					result.Title = val
-				case "format":
-					if val == "markdown" {
-						markdown = true
-					} else {
-						return result, fmt.Errorf("unknown entry-format %s", val)
-					}
-				case "tags":
-					tags := strings.Split(val, ",")
-					for _, t := range tags {
-						t = strings.TrimSpace(t)
-						t = strings.ToLower(t)
-						if len(t) >= 1 {
-							result.Tags = append(result.Tags, t)
-						}
-					}
-					sort.Strings(result.Tags)
-				default:
-					return result, fmt.Errorf("unknown header-key %s in file %s", key, path)
-				}
+		case "title", "subject":
+			result.Title = val
+		case "format":
+			if val == "markdown" {
+				markdown = true
 			} else {
-				return result, fmt.Errorf("malformed header '%s' in %s", line, path)
+				return result, fmt.Errorf("unknown entry-format %s", val)
 			}
-		} else {
-			body += line + "\n"
+		case "tags":
+			tags := strings.Split(val, ",")
+			for _, t := range tags {
+				t = strings.TrimSpace(t)
+				t = strings.ToLower(t)
+				if len(t) >= 1 {
+					result.Tags = append(result.Tags, t)
+				}
+			}
+			sort.Strings(result.Tags)
+		default:
+			return result, fmt.Errorf("unknown header-key %s in file %s", key, path)
 		}
 	}
 
@@ -222,7 +167,7 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 			//
 			// Read the blog-comment
 			//
-			x, err := readComment(comment)
+			x, err := NewBlogComment(comment)
 			if err != nil {
 				return result, err
 			}
@@ -233,87 +178,5 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 	//
 	// And return
 	//
-	return result, nil
-}
-
-// readComment reads a comment from the named file, and returns that
-// in a structured form.
-func readComment(path string) (BlogComment, error) {
-
-	// The comment we expect to read.
-	var result BlogComment
-
-	// Read the file
-	bytes, err := ioutil.ReadFile(path)
-	if err != nil {
-		return result, err
-	}
-
-	// Split by newlines - because we want to process the header
-	lines := strings.Split(string(bytes), "\n")
-
-	// We'll process the header, and append the body here
-	body := ""
-
-	// We start off in the header
-	header := true
-
-	// Compile a regular expression to save redoing this for
-	// each header-line
-	headerRegex, rErr := regexp.Compile("^([^:]+):(.*)$")
-	if rErr != nil {
-		return result, rErr
-	}
-
-	// Process each line
-	for _, line := range lines {
-
-		// If we're in the header ..
-		if header {
-
-			// Empty line?  Then header-time is over
-			if len(line) < 1 {
-				header = false
-				continue
-			}
-
-			// Find the key + value
-			header := headerRegex.FindStringSubmatch(line)
-
-			// If we did then we're good
-			if len(header) == 3 {
-
-				// Save the key + value
-				key := header[1]
-				val := header[2]
-
-				// Cleanup
-				key = strings.ToLower(key)
-				val = strings.TrimSpace(val)
-
-				// Now process known-good keys
-				switch key {
-				case "name":
-					result.Author = val
-				case "mail":
-					m := strings.ToLower(val)
-					h := fmt.Sprintf("%x", md5.Sum([]byte(m)))
-					result.Icon = "//www.gravatar.com/avatar.php?gravatar_id=" + h + ";size=32"
-
-				case "link":
-					result.Link = val
-				default:
-					//			fmt.Printf("Unknown header-key %s in file %s", key, path)
-				}
-			} else {
-				//		fmt.Printf("malformed header '%s' in %s", line, path)
-			}
-		} else {
-			body += line + "\n"
-		}
-	}
-
-	result.Body = body
-
 	return result, nil
 }
