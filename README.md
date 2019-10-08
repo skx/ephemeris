@@ -10,7 +10,7 @@ The chronicle blog compiler started life as a simple project, but grew in comple
   * The plugins would run SQL-queries to extract posts of interest.
     * For example building a tag-cloud.
     * For example building an archive-view.
-    * For example outputing the front-page (10 most recent posts) & associated RSS-feed.
+    * For example outputting the front-page (10 most recent posts) & associated RSS-feed.
 * Once complete the SQLite database would be destroyed.
 
 The intention was that the use of the intermediary SQLite database would allow everything to be generated in a flexible fashion, with very loose coupling.  However over time most of the complexity I had previous required fell away, as I completed the process of tidying up entries - which had been imported from previous blogging-solutions.
@@ -25,7 +25,7 @@ There is no plugin-mechanism, there is no theming-support, instead there is a si
 
 ## Blog Format
 
-As with `chronicle` the input to this program is a directory contaning a series of blog-posts.  Each post will be stored in a single file, with the entry being prefixed by a header containing meta-data.
+As with `chronicle` the input to this program is a directory containing a series of blog-posts.  Each post will be stored in a single file, with the entry being prefixed by a header containing meta-data.
 
 A sample post would look like this:
 
