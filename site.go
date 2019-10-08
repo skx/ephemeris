@@ -27,6 +27,9 @@ type Ephemeris struct {
 
 	// CommentFiles holds the filenames of comments we've found.
 	CommentFiles []string
+
+	// Prefix is the absolute prefix for the blog
+	Prefix string
 }
 
 // New creates a new site object.
@@ -57,10 +60,15 @@ func New(directory string, commentPath string) *Ephemeris {
 // The entries are returned in a random-order, and contain a complete
 // copy of all the text in the entries.  This means that there is a reasonable
 // amount of memory overhead here.
-func (e *Ephemeris) Entries() ([]BlogEntry, error) {
+func (e *Ephemeris) Entries(prefix string) ([]BlogEntry, error) {
 
 	// Results
 	var results []BlogEntry
+
+	//
+	// Save the prefix
+	//
+	e.Prefix = prefix
 
 	//
 	// Find the files

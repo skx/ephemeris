@@ -197,11 +197,15 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 	}
 
 	//
-	// TODO: Move this elsewhere.
+	// Normalise the output
 	//
 	link := reg.ReplaceAllString(result.Title, "_") + ".html"
 	link = strings.ToLower(link)
-	result.Link = "https://blog.steve.fi/" + link
+
+	//
+	// Make our link absolute.
+	//
+	result.Link = site.Prefix + link
 
 	//
 	// Add any comments to the appropriate entry
