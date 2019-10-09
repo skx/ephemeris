@@ -14,9 +14,7 @@ import (
 // BlogEntry holds a single post.
 //
 // A post has a series of attributes associated with it, as you would
-// expect.   There are no real surprises here, except for the `MonthName`,
-// `Month` and `Year` attributes which are present solely to ease the
-// generation of the site-archive.
+// expect, such as a title a set of tags, and an associated set of comments.
 type BlogEntry struct {
 	// Title holds the blog-title
 	Title string
@@ -38,11 +36,6 @@ type BlogEntry struct {
 
 	// CommentData contains any blog-comments upon this entry
 	CommentData []BlogComment
-
-	// These are used to simplify our archive-logic
-	MonthName string
-	Month     string
-	Year      string
 }
 
 // NewBlogEntry creates a new blog object from the contents of the given
@@ -86,16 +79,6 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 				return result, err
 			}
 			result.Date = t
-
-			//
-			// These fields are calcuated
-			// solely to simplify the construction
-			// of the archive-pages.
-			//
-			_, m, _ := t.Date()
-			result.MonthName = m.String()
-			result.Month = fmt.Sprintf("%02d", int(m))
-			result.Year = fmt.Sprintf("%v", t.Year())
 
 		case "title", "subject":
 			result.Title = val
@@ -145,7 +128,6 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 	// Normalise the output
 	//
 	link := reg.ReplaceAllString(result.Title, "_") + ".html"
-	link = strings.ToLower(link)
 
 	//
 	// Make our link absolute.
@@ -162,7 +144,7 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 		// scheme of the comments matches the
 		// title(s) of the post(s)
 		//
-		if strings.Contains(comment, link) {
+		if strings.Contains(comment, strings.ToLower(link)) {
 
 			//
 			// Read the blog-comment
