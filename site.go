@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"sort"
 )
 
 // Ephemeris holds our site structure.
@@ -44,6 +45,11 @@ func New(directory string, commentPath string) *Ephemeris {
 	if err != nil {
 		return x
 	}
+
+	// TODO: handle the error!
+	sort.Slice(comments, func(i, j int) bool {
+		return comments[i].ModTime().Before(comments[j].ModTime())
+	})
 
 	// For each comment file - save the name.
 	for _, f := range comments {
