@@ -525,7 +525,7 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 		Entries []ephemeris.BlogEntry
 
 		// RecentPosts has the same data, but for
-		// the side-bar.  It is redundent.
+		// the side-bar.  It is redundant.
 		RecentPosts []ephemeris.BlogEntry
 
 		// Prefix to the site
