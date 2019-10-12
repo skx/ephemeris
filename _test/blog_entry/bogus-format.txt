@@ -1,0 +1,7 @@
+Title: My first post
+Date: 13/01/2005 21:03
+Format: textile
+Tags: foo, bar, baz
+
+<p>Well here is a blog-post.</p>
+<p><a href="https://steve.fi/">steve.fi</a></p>
