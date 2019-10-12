@@ -1,3 +1,8 @@
+[![GoDoc](https://godoc.org/github.com/skx/ephemeris?status.svg)](http://godoc.org/github.com/skx/ephemeris)
+[![Go Report Card](https://goreportcard.com/badge/github.com/skx/ephemeris)](https://goreportcard.com/report/github.com/skx/ephemeris)
+[![license](https://img.shields.io/github/license/skx/ephemeris.svg)](https://github.com/skx/ephemeris/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/release/skx/ephemeris.svg)](https://github.com/skx/ephemeris/releases/latest)
+
 # Ephemeris
 
 For many years I've generated [my blog](https://blog.steve.fi/) with the [chronicle blog compiler](https://steve.fi/Software/chronicle/), but now that project is showing its age.
