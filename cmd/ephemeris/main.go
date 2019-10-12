@@ -461,7 +461,7 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 
 		y := fmt.Sprintf("%d", posts[e[0]].Date.Year())
 		m := fmt.Sprintf("%02d", int(posts[e[0]].Date.Month()))
-		n := fmt.Sprintf("%s", posts[e[0]].Date.Month().String())
+		n := posts[e[0]].Date.Month().String()
 		c := fmt.Sprintf("%v", len(e))
 
 		// Append
