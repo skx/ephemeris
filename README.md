@@ -5,7 +5,13 @@
 
 # Ephemeris
 
-For many years I've generated [my blog](https://blog.steve.fi/) with the [chronicle blog compiler](https://steve.fi/Software/chronicle/), but now that project is showing its age.
+Ephemeris is a golang application which will generate a blog from a collection of static text-files, complete with:
+
+* Archive-view.
+* Tag-cloud.
+* RSS feed
+
+The project is very young, and written primarily to generate [my own blog](https://blog.steve.fi/), which was previously generated with the perl-based [chronicle blog compiler](https://steve.fi/Software/chronicle/).
 
 The chronicle blog compiler started life as a simple project, but grew in complexity over time.  Part of the reason the complexity grew was because the project was very flexible:
 
@@ -18,14 +24,51 @@ The chronicle blog compiler started life as a simple project, but grew in comple
     * For example outputting the front-page (10 most recent posts) & associated RSS-feed.
 * Once complete the SQLite database would be destroyed.
 
-The intention was that the use of the intermediary SQLite database would allow everything to be generated in a flexible fashion, with very loose coupling.  However over time most of the complexity I had previous required fell away, as I completed the process of tidying up entries - which had been imported from previous blogging-solutions.
+My expectation was that the use of an intermediary SQLite database would allow content to be generated in a very flexible and extensible fashion, however over time it became apparant that I didn't need things to be too flexible!
 
-In short this project was started to do only what I actually require:
+In short this project was born to replace chronicle, and perform the things I actually need, rather than what I suspected I might enjoy.
 
-* Read the blog-posts which chronicle previously read.
-* Generate all the pages.
 
-There is no plugin-mechanism, there is no theming-support, instead there is a single theme which matches the previous default theme I used/wrote.
+## Chronicle Migration
+
+There are some [brief notes on migration](MIGRATION.md) available.
+
+
+## Installation
+
+You can install from source, by cloning the repository and runnign:
+
+    cd ephemeris/cmd/ephemeris
+    go build .
+    go install .
+
+Or you can visit the [release page](https://github.com/skx/evalfilter/releases) to download a binary.
+
+
+## Blog Generation
+
+The application has only a couple of configuration values, which must be setup
+in the `ephemeris.json` file:
+
+        {
+          "Posts":    "posts/",
+          "Comments": "/comments/",
+          "Prefix":   "http://blog.steve.fi/"
+        }
+
+Create a suitable file, then run the application with no arguments:
+
+    $ ephemeris
+
+The generated output will be placed in the `output/` directory.  The configuration-keys in the JSON file are:
+
+* `Posts`
+  * This is the path to the directory containing your blog-posts.
+* `Comments`
+  * This is the path to the directory containing your comments.
+  * If this is empty then no comments will be read/inserted into your output
+* `Prefix`
+  * This is the URL-prefix used to generate all links.
 
 
 ## Blog Format
@@ -49,59 +92,6 @@ There are a few things to note here:
 * If there is no `format: markdown` header then the body will be assumed to be HTML.
   * All my early posts were written in HTML.
   * Later I switched to markdown.
-
-
-## Implementation
-
-Most of the code, in the core package, is associated with parsing a single
-blog-post from a text-file.
-
-Once we have a single blog post then a site is just an array of them!
-
-The only real complication is walking that array of posts to output
-each page.  We do that in the `cmd` subdirectory.
-
-
-## Migration Guide
-
-As noted this project was designed to replace `chronicle`, so it is broadly compatible.  However there are two mandatory changes.  The first is that the comments we process must all be renamed.  Old comments had the form:
-
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-13:18:09`
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-13:20:39`
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-14:20:40`
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-14:44:15`
-
-We now expect these to be named:
-
-* `${link}.${ctime}`
-
-So these examples would become:
-
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227432366`
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227439089`
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227439239`
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227442840`
-* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227444255`
-
-The second change is that it is now a fatal-error for a blog-post to have a header-key which is unknown.  You'll see the unknown key dumped if one is seen.  For example in the past it was possible to write a post:
-
-```
-Subject: This is my post
-Date: DD/MM/YYYY HH:MM
-Format: markdown
-Blah: foo
-Publish: later
-Tags: foo, bar baz
-
-This is my post
-```
-
-Now `Blah`, and `Publish` are explicitly prohibited.  You'll also note that the date-format has become __much__ more strict.  If your entry-posts have a different format they'll need to be updated.
-
-TLDR:
-
-* Rename comments.
-* Tidy headers
 
 
 ## Demo Blog
@@ -128,6 +118,11 @@ Finally open http://localhost:8000 in your browser
 This project is not documented to my usual and preferred standard, no doubt it will improve over time.
 
 However there are many blog packages out there, so I expect this project will only be of interest to those wishing to switch from `chronicle`.
+
+
+## Hacking
+
+Some brief notes on the theme/output generation are available in [HACKING.md](HACKING.md).
 
 
 Steve
