@@ -614,9 +614,7 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 		// The most recent post has comments enabled,
 		// all others do not.
 		//
-		if entry.Path == recentPosts[0].Path {
-			pageData.AddComment = true
-		}
+		pageData.AddComment = (entry.Path == recentPosts[0].Path)
 
 		//
 		// We have a link and that points to a filename.
