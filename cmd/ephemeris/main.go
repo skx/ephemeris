@@ -18,7 +18,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"html"
 	"log"
@@ -34,13 +33,6 @@ import (
 
 	"github.com/skx/ephemeris"
 )
-
-//
-// Command-line flags (temporary) TODO - remove
-//
-
-var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
-var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
 //
 // Variables which are reused live here.
@@ -674,18 +666,6 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 
 // main is our entry-point.
 func main() {
-	flag.Parse()
-	if *cpuprofile != "" {
-		f, err := os.Create(*cpuprofile)
-		if err != nil {
-			log.Fatal("could not create CPU profile: ", err)
-		}
-		defer f.Close()
-		if err := pprof.StartCPUProfile(f); err != nil {
-			log.Fatal("could not start CPU profile: ", err)
-		}
-		defer pprof.StopCPUProfile()
-	}
 
 	//
 	// Record our start-time
