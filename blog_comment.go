@@ -76,6 +76,9 @@ func NewBlogComment(path string) (BlogComment, error) {
 
 		case "link":
 			result.Link = val
+			if !strings.HasPrefix(result.Link, "http") {
+				result.Link = "http://" + result.Link
+			}
 
 		}
 	}
