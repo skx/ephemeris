@@ -20,12 +20,9 @@ package main
 import (
 	"fmt"
 	"html"
-	"log"
 	"net/url"
 	"os"
 	"path/filepath"
-	"runtime"
-	"runtime/pprof"
 	"sort"
 	"strings"
 	"text/template"
@@ -768,17 +765,5 @@ func main() {
 	//
 	elapsed := time.Since(start)
 	fmt.Printf("Compilation took %s\n", elapsed)
-
-	if *memprofile != "" {
-		f, err := os.Create(*memprofile)
-		if err != nil {
-			log.Fatal("could not create memory profile: ", err)
-		}
-		defer f.Close()
-		runtime.GC() // get up-to-date statistics
-		if err := pprof.WriteHeapProfile(f); err != nil {
-			log.Fatal("could not write memory profile: ", err)
-		}
-	}
 
 }
