@@ -51,10 +51,6 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 	// Create a helper to read the entry.
 	reader := headerfile.New(path)
 
-	// Blog-posts might have `format: markdown`.  If not they'll
-	// be treated as HTML.
-	markdown := false
-
 	// Read the headers from the post
 	headers, err := reader.Headers()
 	if err != nil {
@@ -84,7 +80,7 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 			result.Title = val
 		case "format":
 			if val == "markdown" {
-				markdown = true
+				body = string(github_flavored_markdown.Markdown([]byte(body)))
 			} else {
 				return result, fmt.Errorf("unknown entry-format %s", val)
 			}
@@ -101,13 +97,6 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 		default:
 			return result, fmt.Errorf("unknown header-key %s in file %s", key, path)
 		}
-	}
-
-	//
-	// Is this markdown?  If so convert it.
-	//
-	if markdown {
-		body = string(github_flavored_markdown.Markdown([]byte(body)))
 	}
 
 	//
