@@ -19,14 +19,13 @@
     </div>
     <p>&nbsp;</p>
     <table>
-      <tr><td width="10%">
-        </td>
-        <td>
+      <tr><td width="10%" id="indent"></td>
+        <td id="content">
           {{template "data/inc/blog_post.tmpl" .Entry}}
           {{template "data/inc/comments_on_blog_post.tmpl" .Entry}}
           {{template "data/inc/add_comment_form.tmpl" .}}
         </td>
-        <td width="20%">
+        <td width="20%" id="sidebar">
           {{template "data/inc/recent_posts.tmpl" .}}
         </td>
       </tr>

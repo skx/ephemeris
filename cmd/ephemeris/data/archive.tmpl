@@ -19,9 +19,8 @@
     </div>
     <p>&nbsp;</p>
     <table>
-      <tr><td width="10%">
-        </td>
-        <td>
+      <tr><td width="10%" id="indent"></td>
+        <td id="content">
            <h1>Archive</h1>
            <div style="width:50%">
            {{range .}}
@@ -36,7 +35,7 @@
             {{end}}
            </div>
         </td>
-        <td width="20%">
+        <td width="20%" id="sidebar">
         <!-- hack -->
         {{range $i, $t := .}}
         {{if $i }} {{else}}

@@ -19,15 +19,14 @@
     </div>
     <p>&nbsp;</p>
     <table>
-      <tr><td width="10%">
-        </td>
-        <td>
+      <tr><td width="10%" id="indent"></td>
+        <td id="content">
        <h1>Tag Cloud</h1>
        {{range .Tags}}
        <span style="font-size: {{.TSize}}px"><a href="/tags/{{ESCAPE .Tag}}" title="Used {{.Count}} times">{{ESCAPE .Tag}}</a></span>
        {{end}}
         </td>
-        <td width="20%">
+        <td width="20%" id="sidebar">
           {{template "data/inc/recent_posts.tmpl" .}}
         </td>
       </tr>
