@@ -17,7 +17,7 @@ func TestMissing(t *testing.T) {
 // Test reading a valid blog-comment
 func TestValid(t *testing.T) {
 
-	b, err := NewBlogComment("_test/blog_entry/valid.html.12345")
+	b, err := NewBlogComment("_test/blog_comment/valid.html.12345")
 	if err != nil {
 		t.Errorf("unexpected error %s", err.Error())
 	}
@@ -36,7 +36,7 @@ func TestValid(t *testing.T) {
 // Blog-posts should be "${name}.html.${ctime}".
 func TestBadNaming(t *testing.T) {
 
-	_, err := NewBlogComment("_test/blog_entry/invalid.html.html")
+	_, err := NewBlogComment("_test/blog_comment/invalid.html.html")
 	if err == nil {
 		t.Errorf("received no error, but wanted one")
 	}
@@ -51,7 +51,7 @@ func TestBadNaming(t *testing.T) {
 // The header should be "key:val" or "key = val".  Anything else is bogus.
 func TestBadHeader(t *testing.T) {
 
-	_, err := NewBlogComment("_test/blog_entry/invalid.html.12345")
+	_, err := NewBlogComment("_test/blog_comment/invalid.html.12345")
 	if err == nil {
 		t.Errorf("received no error, but wanted one")
 	}
