@@ -58,11 +58,10 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 	}
 
 	// Read the body from the post
-	body := ""
-	body, err = reader.Body()
-	if err != nil {
-		return result, err
-	}
+	//
+	// errors can't happen here, because if they were present
+	// they would have happened in the header-read.
+	body, _ := reader.Body()
 
 	// Sanity-check the headers
 	for key, val := range headers {
