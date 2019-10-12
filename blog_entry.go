@@ -153,6 +153,10 @@ func NewBlogEntry(path string, site *Ephemeris) (BlogEntry, error) {
 			if err != nil {
 				return result, err
 			}
+
+			//
+			// Append it to our list.
+			//
 			result.CommentData = append(result.CommentData, x)
 		}
 	}

@@ -72,7 +72,7 @@ func NewBlogComment(path string) (BlogComment, error) {
 		case "mail":
 			m := strings.ToLower(val)
 			h := fmt.Sprintf("%x", md5.Sum([]byte(m)))
-			result.Icon = "//www.gravatar.com/avatar.php?gravatar_id=" + h + ";size=32"
+			result.Icon = "//www.gravatar.com/avatar/" + h + ";size=32"
 
 		case "link":
 			result.Link = val
@@ -84,20 +84,27 @@ func NewBlogComment(path string) (BlogComment, error) {
 	}
 
 	//
-	// Get the suffix
+	// Our comment files will be:
+	//
+	//   $title.html.$ctime
+	//
+	// So the suffix here will be ".$ctime", extract that
+	// to just the creation time (seconds past the unix epoch).
 	//
 	suffix := filepath.Ext(path)
 	suffix = strings.TrimPrefix(suffix, ".")
 
 	//
-	// Convert to a number
+	// Convert the seconds-past-epoch to a number
+	//
 	i, err := strconv.ParseInt(suffix, 10, 64)
 	if err != nil {
 		return result, err
 	}
 
 	//
-	// Now save the time
+	// Now convert the unix-time to a real time.
+	//
 	result.Date = time.Unix(i, 0)
 
 	//
