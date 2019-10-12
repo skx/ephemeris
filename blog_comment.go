@@ -3,7 +3,10 @@ package ephemeris
 import (
 	"crypto/md5"
 	"fmt"
+	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/skx/headerfile"
 )
@@ -24,6 +27,12 @@ type BlogComment struct {
 
 	// Link holds any user-submitted URL.
 	Link string
+
+	// Date is when the comment was created - this is extracted
+	// from the filename of the comment file.
+	//
+	// The filenames of our comments are "${title}.html.${epoch-seconds}"
+	Date time.Time
 }
 
 // NewBlogComment reads a comment from the named file, and returns that
@@ -70,6 +79,23 @@ func NewBlogComment(path string) (BlogComment, error) {
 
 		}
 	}
+
+	//
+	// Get the suffix
+	//
+	suffix := filepath.Ext(path)
+	suffix = strings.TrimPrefix(suffix, ".")
+
+	//
+	// Convert to a number
+	i, err := strconv.ParseInt(suffix, 10, 64)
+	if err != nil {
+		return result, err
+	}
+
+	//
+	// Now save the time
+	result.Date = time.Unix(i, 0)
 
 	//
 	// Save the body and return the object.

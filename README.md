@@ -57,6 +57,40 @@ The only real complication is walking that array of posts to output
 each page.  We do that in the `cmd` subdirectory.
 
 
-## TODO
+## Migration Guide
 
-* Style pages
+As noted this project was designed to replace `chronicle`, so it is broadly compatible.
+
+However there are two mandatory changes.  The first is that the comments we process
+must all be renamed.  Old comments had the form:
+
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-13:18:09`
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-13:20:39`
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-14:20:40`
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-14:44:15`
+
+We now expect these to be named:
+
+* `${link}.${ctime}`
+
+The second change is that it is now a fatal-error for a blog-post to have a header-key
+which is unknown.  You'll see the unknown key dumped if one is seen.  For example in
+the past it was possible to write a post:
+
+```
+Subject: This is my post
+Date: DD/MM/YYYY HH:MM
+Format: markdown
+Blah: foo
+Publish: later
+Tags: foo, bar baz
+
+This is my post
+```
+
+Now `Blah`, and `Publish` are explicitly prohibited.  You'll also note that the date-format has become __much__ more strict.  If your entry-posts have a different format they'll need to be updated.
+
+TLDR:
+
+* Rename comments.
+* Tidy headers
