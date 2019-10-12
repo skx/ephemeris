@@ -6,7 +6,12 @@
 <div class="comment">
   <div class="commentheader">
    <table>
-   <tr><td width="100%"><img alt="icon" width="32" height="32" src="{{.Icon}}">&nbsp;&nbsp;&nbsp;<cite>{{.Author}}</cite> {{.Date}} <div style="text-align:right"><a href="{{LOWER .Link}}" rel="nofollow">{{LOWER .Link}}</a></div></td></tr>
+   <tr><td width="32">
+           <img alt="icon" width="32" height="32" src="{{.Icon}}" alt="user-icon"></td>
+       <td>{{.Author}} {{COMMENT_POST_DATE .Date}}<br/>
+            <a href="{{LOWER .Link}}" rel="nofollow">{{LOWER .Link}}</a>
+       </td>
+   </tr>
    </table>
   </div>
   <div class="commentbody">

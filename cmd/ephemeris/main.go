@@ -151,6 +151,12 @@ func loadTemplates() *template.Template {
 			year, month, day := d.Date()
 			return (fmt.Sprintf("%d %s %d %02d:%02d", day, month.String(), year, d.Hour(), d.Minute()))
 		},
+
+		// Date used on comments.
+		"COMMENT_POST_DATE": func(d time.Time) string {
+			year, month, day := d.Date()
+			return (fmt.Sprintf("at %02d:%02d on %d %s %d", d.Hour(), d.Minute(), day, month.String(), year))
+		},
 	})
 
 	// Add in each static-file
