@@ -1,0 +1,8 @@
+Title: This is my test post
+Tags: meta, hello
+Date: 10/10/2019 21:50
+Format: markdown
+
+This is my first post, as you can see it has some content.
+
+This is in markdown.

@@ -1,0 +1,6 @@
+{
+    "Posts": "data/",
+    "Comments": "comments/",
+    "Prefix": "http://localhost:8000/",
+    "OutputPath": "output/"
+}

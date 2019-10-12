@@ -59,10 +59,7 @@ each page.  We do that in the `cmd` subdirectory.
 
 ## Migration Guide
 
-As noted this project was designed to replace `chronicle`, so it is broadly compatible.
-
-However there are two mandatory changes.  The first is that the comments we process
-must all be renamed.  Old comments had the form:
+As noted this project was designed to replace `chronicle`, so it is broadly compatible.  However there are two mandatory changes.  The first is that the comments we process must all be renamed.  Old comments had the form:
 
 * `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-13:18:09`
 * `you_ve_had_this_coming_since_the_day_you_arrived.html.23-November-2008-13:20:39`
@@ -73,9 +70,15 @@ We now expect these to be named:
 
 * `${link}.${ctime}`
 
-The second change is that it is now a fatal-error for a blog-post to have a header-key
-which is unknown.  You'll see the unknown key dumped if one is seen.  For example in
-the past it was possible to write a post:
+So these examples would become:
+
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227432366`
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227439089`
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227439239`
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227442840`
+* `you_ve_had_this_coming_since_the_day_you_arrived.html.1227444255`
+
+The second change is that it is now a fatal-error for a blog-post to have a header-key which is unknown.  You'll see the unknown key dumped if one is seen.  For example in the past it was possible to write a post:
 
 ```
 Subject: This is my post
@@ -94,3 +97,32 @@ TLDR:
 
 * Rename comments.
 * Tidy headers
+
+
+## Demo Blog
+
+There is a demo-blog contained within this repository; to use it:
+
+```
+cd _demo
+ephemeris
+```
+
+This will generate `_demo/output/`, and you can then serve that via:
+
+```
+cd output/
+python -m SimpleHTTPServer 8000
+```
+
+Finally open http://localhost:8000 in your browser
+
+
+## Feedback
+
+This project is not documented to my usual and preferred standard, no doubt it will improve over time.
+
+However there are many blog packages out there, so I expect this project will only be of interest to those wishing to switch from `chronicle`.
+
+
+Steve
