@@ -1,0 +1,9 @@
+<h3>Recent Posts</h3>
+<ul style="list-style:none;">
+{{range .RecentPosts}}
+<li><b>{{RECENT_POST_DATE .Date}}</b>
+<ul style="list-style:none;">
+<li><a href="{{LOWER .Link}}">{{.Title}}</a></li>
+</ul></li>
+{{end}}
+</ul>

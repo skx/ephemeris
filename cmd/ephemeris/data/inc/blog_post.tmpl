@@ -1,0 +1,23 @@
+<div>
+  <h2 class="underlined"><a href="{{LOWER .Link}}" style="text-decoration:none; color:black;">{{.Title}}</a></h2>
+  <p style="text-align:right; width:100%">{{BLOG_POST_DATE .Date}}</p>
+  <div class="entry-content">{{.Content}}
+  <p style="text-align:right;width:100%">
+    <span class="entry-category">
+     {{ $length := len .Tags }} {{ if eq $length 0 }}
+       No tags
+     {{ else }}
+       Tags: {{range $i, $t := .Tags}}{{if $i}}, {{end}}<a href="/tags/{{ESCAPE .}}">{{ESCAPE .}}</a>{{end}}
+     {{end}}
+    </span>
+    <span class="meta-sep">|</span>
+    <span class="entry-comments">
+     {{ $length := len .CommentData }} {{ if eq $length 0 }}
+      No comments
+     {{ else }}
+      <a href="{{LOWER .Link}}#comments">{{len .CommentData}} comments</a>
+     {{end}}
+    </span>
+    </p>
+</div>
+<p>&nbsp;</p>

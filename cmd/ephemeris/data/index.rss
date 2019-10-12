@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns="http://purl.org/rss/1.0/"
+>
+<channel rdf:about="{{.Prefix}}">
+<title>Steve Kemp&#39;s Blog</title>
+<link>{{.Prefix}}</link>
+<description>Debian and Free Software</description>
+<items>
+ <rdf:Seq>
+{{range .Entries}}
+  <rdf:li rdf:resource="{{LOWER .Link}}"/>
+{{end}}
+ </rdf:Seq>
+</items>
+</channel>
+{{range .Entries}}
+<item rdf:about="{{LOWER .Link}}">
+<title>{{ESCAPE .Title}}</title>
+<link>{{LOWER .Link}}</link>
+<content:encoded>{{ESCAPE .Content}}</content:encoded>
+<dc:date>{{ISO8601 .Date}}</dc:date>
+</item>
+{{end}}
+</rdf:RDF>

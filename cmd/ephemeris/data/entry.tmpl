@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{.Entry.Title}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="alternate" type="application/rss+xml" href="{{.Prefix}}index.rss" title="RSS feed for {{.Prefix}}">
+    {{template "data/inc/css.tmpl"}}
+  </head>
+  <body>
+    <div class="header">
+      <a href="{{.Prefix}}" class="logo">Steve Kemp's Blog<span> - Debian &amp; Free Software</span></a>
+      <div class="header-right">
+        <a href="/about/">About</a>
+        <a href="/archive/">Archive</a>
+        <a href="/tags/">Tags</a>
+        {{template "data/inc/rss.tmpl"}}
+      </div>
+    </div>
+    <p>&nbsp;</p>
+    <table>
+      <tr><td width="10%">
+        </td>
+        <td>
+          {{template "data/inc/blog_post.tmpl" .Entry}}
+          {{template "data/inc/comments_on_blog_post.tmpl" .Entry}}
+          {{template "data/inc/add_comment_form.tmpl" .}}
+        </td>
+        <td width="20%">
+          {{template "data/inc/recent_posts.tmpl" .}}
+        </td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <div class="footer">
+      <p class="left">Created by ephemeris.</p>
+      <p class="right">&copy; <a href="https://steve.kemp.fi/">Steve Kemp</a></p>
+    </div>
+  </body>
+</html>

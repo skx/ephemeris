@@ -1,0 +1,20 @@
+          {{if .AddComment }}
+          <h2>Add your comment</h2>
+          <form action="/cgi-bin/comments.cgi" id="cform" name="cform" method="POST" accept-charset="utf-8">
+            <input type="hidden" name="id" value="{{LOWER .Entry.Link}}" />
+            <input type="hidden" name="robot" id="robot" value="" />
+            <input type="hidden" name="frosty" id="frosty" value="&#9731;">
+            <table>
+              <tr><td><b>Name</b>:</td>
+                <td><input type="text" size="55" name="name" /></td></tr>
+              <tr><td><b>Email</b>:</td>
+                <td><input type="text" size="55" name="mail" /></td></tr>
+              <tr><td><b>Website</b>:</td>
+                <td><input type="text" size="55" name="link" /></td></tr>
+              <tr><td colspan="2"><b>Your Comment</b><br />
+                  <textarea name="body" rows="10" cols="60"></textarea></td></tr>
+              <tr><td></td><td align="right"><input type="submit" name="submit" value="Post Comment"/></td></tr>
+            </table>
+          </form>
+          <p>Your submission will be ignored if any of the fields are left blank, but your email address will <b>never</b> be displayed.</p>
+          {{end}}
