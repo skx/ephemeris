@@ -467,10 +467,18 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 			MonthName: n,
 		})
 
-		sort.Slice(existing, func(i, j int) bool {
-			return existing[i].Month < existing[j].Month
-		})
 		mappy[y] = existing
+	}
+
+	// Sort the entries now we've generated them.
+	for k, entries := range mappy {
+
+		vals := mappy[k]
+		sort.Slice(entries, func(i, j int) bool {
+			return entries[i].Month < entries[j].Month
+		})
+		mappy[k] = vals
+
 	}
 
 	//
