@@ -23,6 +23,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"sync"
@@ -48,10 +49,10 @@ var tmpl *template.Template
 // to access those variables even though that is a bad design.
 var config Config
 
-// mkdirIfMissing makes a directory.
-// The name is a little misleading, we attempt to create a directory
-// and if it fails because the directory already exists we just don't
-// care.
+// mkdirIfMissing makes a directory, if it is missing.
+//
+// The overhead of calling `stat` probably makes it cheaper to just
+// always call `mkdir` and ignore the error, but this is cleaner.
 func mkdirIfMissing(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		os.MkdirAll(path, 0755)
@@ -61,8 +62,8 @@ func mkdirIfMissing(path string) {
 // getRecentPosts fetches the most recent N posts from our collection
 // of entries.  It is used to render the partial/sidebar
 //
-// This could be more efficient by being called only once, instead of
-// for each substep of the build-process.
+// We moved this routine into its own function for cleanliness, although
+// it is only called once.
 func getRecentPosts(posts []ephemeris.BlogEntry, count int) []ephemeris.BlogEntry {
 
 	// The return-value
@@ -515,9 +516,11 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 	return nil
 }
 
-// outputIndex outputs the /index.html + /index.rss file(s).
+// outputIndex outputs the /index.html file.
 //
-// We sort the entries here, and limit to the 10 most recent posts.
+// We don't need to sort, or limit ourselves here, because we only use
+// the "most recent posts" we've already discovered.
+//
 func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) error {
 
 	mkdirIfMissing(config.OutputPath)
@@ -561,6 +564,63 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 		return err
 	}
 	output.Close()
+
+	//
+	// Create the output file.
+	//
+	rss, err := os.Create(filepath.Join(config.OutputPath, "index.rss"))
+	if err != nil {
+		return err
+	}
+
+	//
+	// Render the RSS template too, with the same data
+	//
+	err = tmpl.ExecuteTemplate(rss, "data/index.rss", pageData)
+	if err != nil {
+		return err
+	}
+	rss.Close()
+
+	return nil
+
+}
+
+// outputRSS outputs the /index.rss file.
+//
+// We don't need to sort, or limit ourselves here, because we only use
+// the "most recent posts" we've already discovered.
+//
+func outputRSS(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) error {
+
+	mkdirIfMissing(config.OutputPath)
+
+	// Page-structure for the site.
+	type Recent struct {
+
+		// Entries has the most recent entries.
+		Entries []ephemeris.BlogEntry
+
+		// RecentPosts has the same data, but for
+		// the side-bar.  It is redundant.
+		RecentPosts []ephemeris.BlogEntry
+
+		// Prefix to the site
+		Prefix string
+	}
+
+	//
+	// The data we'll store for the page.
+	//
+	// Our front-page shows the same number of posts as
+	// the recent-list in the sidebar, so we don't need
+	// to do anything special here, we show the same
+	// list for both of them.
+	//
+	var pageData Recent
+	pageData.Entries = recentPosts
+	pageData.RecentPosts = recentPosts
+	pageData.Prefix = config.Prefix
 
 	//
 	// Create the output file.
@@ -742,14 +802,22 @@ func main() {
 	recent := getRecentPosts(entries, 10)
 
 	//
-	// Output the per-tag pages, and the tagcloud at /tags/
+	// We're going to run the page-generation in a series of threads
+	// now.  So we'll add a synchronizer here.
 	//
-
 	var wg sync.WaitGroup
 
-	// Four routines
-	wg.Add(4)
+	//
+	// Ensure we use all the CPU we have available.
+	//
+	runtime.GOMAXPROCS(runtime.NumCPU())
 
+	// Four routines
+	wg.Add(5)
+
+	//
+	// Output tag-cloud, and per-tag pages.
+	//
 	go func() {
 		err := outputTags(entries, recent)
 		if err != nil {
@@ -772,12 +840,24 @@ func main() {
 	}()
 
 	//
-	// Output index page + RSS feed which has the same information.
+	// Output index page.
 	//
 	go func() {
 		err := outputIndex(entries, recent)
 		if err != nil {
-			fmt.Printf("Error rendering index.html / index.rss: %s\n", err.Error())
+			fmt.Printf("Error rendering index.html: %s\n", err.Error())
+			os.Exit(1)
+		}
+		wg.Done()
+	}()
+
+	//
+	// Output RSS feed which has the same information as the index-page.
+	//
+	go func() {
+		err := outputRSS(entries, recent)
+		if err != nil {
+			fmt.Printf("Error rendering /index.rss: %s\n", err.Error())
 			os.Exit(1)
 		}
 		wg.Done()
