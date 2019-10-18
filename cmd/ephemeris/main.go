@@ -25,6 +25,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 	"text/template"
 	"time"
 
@@ -249,13 +250,13 @@ func outputTags(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) 
 		if err != nil {
 			return err
 		}
-		defer output.Close()
 
 		// Render the template
 		err = tmpl.ExecuteTemplate(output, "data/tag_page.tmpl", pageData)
 		if err != nil {
 			return err
 		}
+		output.Close()
 	}
 
 	//
@@ -412,13 +413,13 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 		if err != nil {
 			return err
 		}
-		defer output.Close()
 
 		// Render the template
 		err = tmpl.ExecuteTemplate(output, "data/archive_page.tmpl", pageData)
 		if err != nil {
 			return err
 		}
+		output.Close()
 	}
 
 	//
@@ -504,14 +505,13 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 	if err != nil {
 		return err
 	}
-	defer ar.Close()
 
 	// Render the template
 	err = tmpl.ExecuteTemplate(ar, "data/archive.tmpl", ai)
 	if err != nil {
 		return err
 	}
-
+	ar.Close()
 	return nil
 }
 
@@ -552,13 +552,13 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 	if err != nil {
 		return err
 	}
-	defer output.Close()
 
 	// Render the template
 	err = tmpl.ExecuteTemplate(output, "data/index.tmpl", pageData)
 	if err != nil {
 		return err
 	}
+	output.Close()
 
 	//
 	// Create the output file.
@@ -567,7 +567,6 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 	if err != nil {
 		return err
 	}
-	defer rss.Close()
 
 	//
 	// Render the RSS template too, with the same data
@@ -576,6 +575,7 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 	if err != nil {
 		return err
 	}
+	rss.Close()
 
 	return nil
 
@@ -653,7 +653,6 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 		if err != nil {
 			return err
 		}
-		defer output.Close()
 
 		//
 		// Render the template into it.
@@ -662,6 +661,7 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 		if err != nil {
 			return err
 		}
+		output.Close()
 
 		//
 		// Create symlink
@@ -740,38 +740,59 @@ func main() {
 	//
 	// Output the per-tag pages, and the tagcloud at /tags/
 	//
-	err = outputTags(entries, recent)
-	if err != nil {
-		fmt.Printf("Error rendering tag-pages:%s\n", err.Error())
-		return
-	}
+
+	var wg sync.WaitGroup
+
+	// Four routines
+	wg.Add(4)
+
+	go func() {
+		err := outputTags(entries, recent)
+		if err != nil {
+			fmt.Printf("Error rendering tag-pages:%s\n", err.Error())
+			os.Exit(1)
+		}
+		wg.Done()
+	}()
 
 	//
 	// Output the per year/month archive, and the archive-index.
 	//
-	err = outputArchive(entries, recent)
-	if err != nil {
-		fmt.Printf("Error rendering archive-pages:%s\n", err.Error())
-		return
-	}
+	go func() {
+		err := outputArchive(entries, recent)
+		if err != nil {
+			fmt.Printf("Error rendering archive-pages:%s\n", err.Error())
+			os.Exit(1)
+		}
+		wg.Done()
+	}()
 
 	//
 	// Output index page + RSS feed which has the same information.
 	//
-	err = outputIndex(entries, recent)
-	if err != nil {
-		fmt.Printf("Error rendering index.html / index.rss: %s\n", err.Error())
-		return
-	}
+	go func() {
+		err := outputIndex(entries, recent)
+		if err != nil {
+			fmt.Printf("Error rendering index.html / index.rss: %s\n", err.Error())
+			os.Exit(1)
+		}
+		wg.Done()
+	}()
 
 	//
 	// Output each entry.
 	//
-	err = outputEntries(entries, recent)
-	if err != nil {
-		fmt.Printf("Error rendering blog-posts: %s\n", err.Error())
-		return
-	}
+	go func() {
+		err := outputEntries(entries, recent)
+
+		if err != nil {
+			fmt.Printf("Error rendering blog-posts: %s\n", err.Error())
+			os.Exit(1)
+		}
+		wg.Done()
+	}()
+
+	wg.Wait()
 
 	//
 	// Report on our runtime
