@@ -520,6 +520,8 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 // We sort the entries here, and limit to the 10 most recent posts.
 func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) error {
 
+	mkdirIfMissing(config.OutputPath)
+
 	// Page-structure for the site.
 	type Recent struct {
 
@@ -583,6 +585,8 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 
 // Output one page for each entry.
 func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) error {
+
+	mkdirIfMissing(config.OutputPath)
 
 	// Page-structure for the site.
 	type Recent struct {
