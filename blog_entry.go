@@ -11,10 +11,11 @@ import (
 	"github.com/skx/headerfile"
 )
 
-// BlogEntry holds a single post.
+// BlogEntry holds a single blog-post.
 //
 // A post has a series of attributes associated with it, as you would
 // expect, such as a title a set of tags, and an associated set of comments.
+//
 type BlogEntry struct {
 	// Title holds the blog-title
 	Title string
@@ -36,6 +37,27 @@ type BlogEntry struct {
 
 	// CommentData contains any blog-comments upon this entry
 	CommentData []BlogComment
+}
+
+// Year returns the year of a blog-post, as a string.
+//
+// Having a string return value is useful for template interpolation.
+func (b BlogEntry) Year() string {
+	return (fmt.Sprintf("%d", b.Date.Year()))
+}
+
+// MonthName returns the value of a post's month, as a string, for example
+// "January", "March", etc.
+func (b BlogEntry) MonthName() string {
+	return (b.Date.Month().String())
+}
+
+// MonthNumber returns the value of a post's month, as a two-digit string.
+// For example "01", "11", or "12".
+//
+// Having a string return value is useful for template interpolation.
+func (b BlogEntry) MonthNumber() string {
+	return (fmt.Sprintf("%02d", int(b.Date.Month())))
 }
 
 // NewBlogEntry creates a new blog object from the contents of the given
