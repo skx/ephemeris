@@ -347,7 +347,7 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 	for i, e := range posts {
 
 		// The key is "YYYY/NN"
-		key := fmt.Sprintf("%d/%02d", e.Date.Year(), int(e.Date.Month()))
+		key := e.Year() + "/" + e.MonthNumber()
 
 		existing := archiveMap[key]
 		existing = append(existing, i)
@@ -397,8 +397,8 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 			// We can calculate that from the `Date` field
 			// in the post itself :)
 			//
-			pageData.Year = fmt.Sprintf("%d", posts[e].Date.Year())
-			pageData.Month = posts[e].Date.Month().String()
+			pageData.Year = posts[e].Year()
+			pageData.Month = posts[e].MonthName()
 		}
 
 		// Sort by date - posts will be in order they've been written
@@ -448,10 +448,15 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 	//
 	for _, e := range archiveMap {
 
-		y := fmt.Sprintf("%d", posts[e[0]].Date.Year())
-		m := fmt.Sprintf("%02d", int(posts[e[0]].Date.Month()))
-		n := posts[e[0]].Date.Month().String()
-		c := fmt.Sprintf("%v", len(e))
+		//
+		// Since all the posts are have the same year + month
+		// pair we're able to just use the first entry in
+		// each returned set.
+		//
+		y := posts[e[0]].Year()
+		m := posts[e[0]].MonthNumber()
+		n := posts[e[0]].MonthName()
+		c := fmt.Sprintf("%d", len(e))
 
 		// Append
 		existing := mappy[y]
