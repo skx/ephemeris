@@ -10,12 +10,10 @@ import (
 // Config is the configuration object we use to guide our
 // generation.
 //
-// It is loaded from `ephemeris.json` when the application
-// loads. There are no sane defaults, so that file must be
-// present.
+// It is loaded from `ephemeris.json` when the application loads.
 //
 type Config struct {
-	// Posts holds the directory beneath which we can find blog-posts
+	// Posts holds the directory beneath which we can find blog-posts.
 	Posts string
 
 	// Prefix is the URL-prefix of the generated site, for example
@@ -27,18 +25,25 @@ type Config struct {
 
 	// Output is the path to which we write our output files.
 	OutputPath string
+
+	// AddComments is used to determine whether there is an 'add comment'
+	// form shown on the most recent entry.
+	AddComments bool
 }
 
-// loadConfig loads the `ephemeris.json` file, and returns
-// a configuration-object.
-func loadConfig() (Config, error) {
+// loadConfig loads the specified JSON file, and returns a
+// configuration-object from the contents.
+func loadConfig(path string) (Config, error) {
 
 	//
-	// We look for the file "ephemeris.json" in the current
-	// working directory.
+	// The structure we'll populate
 	//
 	var config Config
-	configFile, err := os.Open("ephemeris.json")
+
+	//
+	// Read the config-file
+	//
+	configFile, err := os.Open(path)
 	if err != nil {
 		return config, err
 	}

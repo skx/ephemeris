@@ -18,6 +18,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html"
 	"net/url"
@@ -686,7 +687,7 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 		// The most recent post has comments enabled,
 		// all others do not.
 		//
-		pageData.AddComment = (entry.Path == recentPosts[0].Path)
+		pageData.AddComment = config.AddComments && (entry.Path == recentPosts[0].Path)
 
 		//
 		// We have a link and that points to a filename.
@@ -742,6 +743,17 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 func main() {
 
 	//
+	// Command-line arguments which are accepted.
+	//
+	confFile := flag.String("config", "ephemeris.json", "The path to our configuration file.")
+	allowComments := flag.Bool("allow-comments", true, "Enable comments to be added to the most recent entry.")
+
+	//
+	// Parse the flags.
+	//
+	flag.Parse()
+
+	//
 	// Record our start-time
 	//
 	start := time.Now()
@@ -750,9 +762,9 @@ func main() {
 	// Load our configuration file (JSON)
 	//
 	var err error
-	config, err = loadConfig()
+	config, err = loadConfig(*confFile)
 	if err != nil {
-		fmt.Printf("Failed to load configuration file %s\n", err.Error())
+		fmt.Printf("Failed to load configuration file %s %s\n", err.Error())
 		return
 	}
 
@@ -768,6 +780,11 @@ func main() {
 	if config.Comments == "" {
 		config.Comments = "comments/"
 	}
+
+	//
+	// Preserve comment setting
+	//
+	config.AddComments = *allowComments
 
 	//
 	// Create an object to generate our blog from
