@@ -764,7 +764,7 @@ func main() {
 	var err error
 	config, err = loadConfig(*confFile)
 	if err != nil {
-		fmt.Printf("Failed to load configuration file %s %s\n", err.Error())
+		fmt.Printf("Failed to load configuration file %s %s\n", *confFile, err.Error())
 		return
 	}
 

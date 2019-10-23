@@ -15,7 +15,7 @@ import (
 // blog post.
 type BlogComment struct {
 
-	// Author holds the name of the comment-submitter
+	// Author holds the name of the comment-submitter.
 	Author string
 
 	// Body holds the body of the comment.
