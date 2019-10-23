@@ -6,22 +6,23 @@
 // Each post will have a small header to include tags, date, title,
 // and will be transformed into a simple site.
 //
-// Compared to `chronicle`, which this package replaces, the biggest
-// difference is a lack of support for comments at this time.
 package ephemeris
 
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 )
 
 // Ephemeris holds our site structure.
 //
-// Currently we only have a site-root, which lets us know
-// where to get our content from, and a path to the comments.
-//
+// There are only a few settings for the blog, which are the obvious
+// ones - a path pointing to the blog-posts, a URL-prefix for use in
+// generation of the output files, and a list of comment files.
+
 type Ephemeris struct {
 	// Root is the source of our posts.
 	Root string
@@ -46,12 +47,14 @@ func New(directory string, commentPath string) *Ephemeris {
 		return x
 	}
 
-	// TODO: handle the error!
+	// Sort the comments, since we want to show them upon
+	// entries in the oldest->newest order.
 	sort.Slice(comments, func(i, j int) bool {
 		return comments[i].ModTime().Before(comments[j].ModTime())
 	})
 
-	// For each comment file - save the name.
+	// Save the (complete) path to each comment-file in our
+	// object, now they're sorted.
 	for _, f := range comments {
 
 		// By appending
@@ -61,7 +64,10 @@ func New(directory string, commentPath string) *Ephemeris {
 	return x
 }
 
-// Entries returns the blog-entries within a site
+// Entries returns the blog-entries contained within a site.  Note that
+// the input directory is searched recursively for files matching the
+// pattern "*.txt" - this allows you to create entries in sub-directories
+// if you wish.
 //
 // The entries are returned in a random-order, and contain a complete
 // copy of all the text in the entries.  This means that there is a reasonable
@@ -77,30 +83,34 @@ func (e *Ephemeris) Entries(prefix string) ([]BlogEntry, error) {
 	e.Prefix = prefix
 
 	//
-	// Find the files
+	// Find the blog-posts, recursively.
 	//
-	files, err := ioutil.ReadDir(e.Root)
-	if err != nil {
-		return results, err
-	}
+	err := filepath.Walk(e.Root,
+		func(path string, info os.FileInfo, err error) error {
 
-	//
-	// For each file, return a structure
-	//
-	for _, f := range files {
+			// Error?  Then we're done.
+			if err != nil {
+				return err
+			}
 
-		// Build up the complete path
-		path := filepath.Join(e.Root, f.Name())
+			// Ignore non-text files.
+			if !strings.HasSuffix(path, ".txt") {
+				return nil
+			}
 
-		// Parse the blog-post
-		out, err := NewBlogEntry(path, e)
-		if err != nil {
-			return results, fmt.Errorf("failed to parse %s - %s", path, err.Error())
-		}
+			// Parse the blog-post from the file.
+			out, err := NewBlogEntry(path, e)
+			if err != nil {
+				return fmt.Errorf("failed to parse %s - %s", path, err.Error())
+			}
 
-		// Store
-		results = append(results, out)
-	}
+			// Store the result.
+			results = append(results, out)
 
-	return results, nil
+			// Continue walking.
+			return nil
+		})
+
+	// Return the entries we found.
+	return results, err
 }
