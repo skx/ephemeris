@@ -70,6 +70,8 @@ The generated output will be placed in the `output/` directory.  The configurati
 * `Prefix`
   * This is the URL-prefix used to generate all links.
 
+There is a command-line flag which lets you specify an alternative configuration-file, if you do not wish to use the default.  Run `ephemeris -help` to see details.
+
 
 ## Blog Format
 
