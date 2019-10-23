@@ -22,7 +22,6 @@ import (
 // There are only a few settings for the blog, which are the obvious
 // ones - a path pointing to the blog-posts, a URL-prefix for use in
 // generation of the output files, and a list of comment files.
-
 type Ephemeris struct {
 	// Root is the source of our posts.
 	Root string
