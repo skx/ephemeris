@@ -1,7 +1,6 @@
 {{ $length := len .CommentData }} {{ if eq $length 0 }}{{ else }}
 <h2 id="comments" name="comments">Comments on this entry</h2>
 {{end}}
-
 {{range .CommentData}}
 <div class="comment">
   <div class="commentheader">
