@@ -40,6 +40,7 @@ import (
 
 // We generate a static-version (read:embedded copy) of all the
 // template-files beneath `data/`.
+//
 // We load each of these as golang templates here, so that they
 // are globally available and we don't have to re-read/re-parse them
 // more than once.
@@ -61,7 +62,7 @@ func mkdirIfMissing(path string) {
 }
 
 // getRecentPosts fetches the most recent N posts from our collection
-// of entries.  It is used to render the partial/sidebar
+// of entries.  It is used to render the partial/sidebar.
 //
 // We moved this routine into its own function for cleanliness, although
 // it is only called once.
@@ -95,7 +96,7 @@ func getRecentPosts(posts []ephemeris.BlogEntry, count int) []ephemeris.BlogEntr
 }
 
 // loadTemplates returns a collection of all the templates we have
-// stored within our `static.go` file.
+// embedded within our `static.go` file.
 //
 // In addition to loading the templates we also populate a function-map,
 // to allow various functions to be made available to all templates.
@@ -216,11 +217,23 @@ func outputTags(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) 
 	//  i.e. /tags/z80
 	//
 	type TagPage struct {
-		Entries     []ephemeris.BlogEntry
-		Tag         string
-		Prefix      string
+
+		// Tag contains the name of the tag.
+		Tag string
+
+		// Prefix contains the site URL-prefix
+		Prefix string
+
+		// Entries holds entries having the given tag
+		Entries []ephemeris.BlogEntry
+
+		// RecentPosts contains data for our sidebar.
 		RecentPosts []ephemeris.BlogEntry
 	}
+
+	//
+	// Create an instance.
+	//
 	var pageData TagPage
 	pageData.RecentPosts = recentPosts
 	pageData.Prefix = config.Prefix
@@ -248,12 +261,17 @@ func outputTags(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) 
 			return a.Before(b)
 		})
 
+		//
+		// Create the output file.
+		//
 		output, err := os.Create(filepath.Join(config.OutputPath, "tags", key, "index.html"))
 		if err != nil {
 			return err
 		}
 
-		// Render the template
+		//
+		// Render the template into our file.
+		//
 		err = tmpl.ExecuteTemplate(output, "data/tag_page.tmpl", pageData)
 		if err != nil {
 			return err
@@ -314,25 +332,26 @@ func outputTags(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) 
 	}
 
 	//
-	// Populate the page
+	// Create the output file
 	//
 	ti, err := os.Create(filepath.Join(config.OutputPath, "tags", "index.html"))
 	if err != nil {
 		return err
 	}
-	defer ti.Close()
 
-	// Render the template
+	//
+	// Render the template into our file.
+	//
 	err = tmpl.ExecuteTemplate(ti, "data/tags.tmpl", tagCloud)
 	if err != nil {
 		return err
 	}
+	ti.Close()
 
 	return nil
 }
 
-// output a year/month page for each distinct period
-// in which we have posts.
+// output a year/month page for each distinct period in which we have posts.
 func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) error {
 
 	//
@@ -364,13 +383,26 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 	//  /archive/2019/03/
 	//
 	type PageData struct {
-		Entries []ephemeris.BlogEntry
-		Year    string
-		Month   string
 
-		Prefix      string
+		// Year contains the year we're covering.
+		Year string
+
+		// Month contains the month we're covering.
+		Month string
+
+		// Prefix contains the URL-prefix of the site.
+		Prefix string
+
+		// Entries holds the entries in the given year/month
+		Entries []ephemeris.BlogEntry
+
+		// RecentPosts holds data for the sidebar.
 		RecentPosts []ephemeris.BlogEntry
 	}
+
+	//
+	// Create an instance of the object.
+	//
 	var pageData PageData
 	pageData.RecentPosts = recentPosts
 	pageData.Prefix = config.Prefix
@@ -411,12 +443,17 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 			return a.Before(b)
 		})
 
+		//
+		// Create the output file.
+		//
 		output, err := os.Create(filepath.Join(config.OutputPath, "archive", key, "index.html"))
 		if err != nil {
 			return err
 		}
 
-		// Render the template
+		//
+		// Render the template into it.
+		//
 		err = tmpl.ExecuteTemplate(output, "data/archive_page.tmpl", pageData)
 		if err != nil {
 			return err
@@ -502,13 +539,17 @@ func outputArchive(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 		ai = append(ai, ArchiveIndex{Year: year, Data: mappy[year], RecentPosts: recentPosts, Prefix: config.Prefix})
 	}
 
+	//
 	// Create the output file.
+	//
 	ar, err := os.Create(filepath.Join(config.OutputPath, "archive", "index.html"))
 	if err != nil {
 		return err
 	}
 
-	// Render the template
+	//
+	// Render the template into our file.
+	//
 	err = tmpl.ExecuteTemplate(ar, "data/archive.tmpl", ai)
 	if err != nil {
 		return err
@@ -553,35 +594,22 @@ func outputIndex(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry)
 	pageData.RecentPosts = recentPosts
 	pageData.Prefix = config.Prefix
 
+	//
 	// Create the output file.
+	//
 	output, err := os.Create(filepath.Join(config.OutputPath, "index.html"))
 	if err != nil {
 		return err
 	}
 
-	// Render the template
+	//
+	// Render the template into our file.
+	//
 	err = tmpl.ExecuteTemplate(output, "data/index.tmpl", pageData)
 	if err != nil {
 		return err
 	}
 	output.Close()
-
-	//
-	// Create the output file.
-	//
-	rss, err := os.Create(filepath.Join(config.OutputPath, "index.rss"))
-	if err != nil {
-		return err
-	}
-
-	//
-	// Render the RSS template too, with the same data
-	//
-	err = tmpl.ExecuteTemplate(rss, "data/index.rss", pageData)
-	if err != nil {
-		return err
-	}
-	rss.Close()
 
 	return nil
 
@@ -606,7 +634,7 @@ func outputRSS(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) e
 		// the side-bar.  It is redundant.
 		RecentPosts []ephemeris.BlogEntry
 
-		// Prefix to the site
+		// Prefix contains the URL-prefix to the site
 		Prefix string
 	}
 
@@ -632,7 +660,7 @@ func outputRSS(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) e
 	}
 
 	//
-	// Render the RSS template too, with the same data
+	// Render the template into it.
 	//
 	err = tmpl.ExecuteTemplate(rss, "data/index.rss", pageData)
 	if err != nil {
