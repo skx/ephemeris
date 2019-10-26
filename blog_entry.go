@@ -17,25 +17,25 @@ import (
 // expect, such as a title a set of tags, and an associated set of comments.
 //
 type BlogEntry struct {
-	// Title holds the blog-title
+	// Title holds the blog-title.
 	Title string
 
-	// Path holds the path to the source-file, on-disk
+	// Path holds the path to the source-file, on-disk.
 	Path string
 
 	// Tags contains a list of tags for the given post.
 	Tags []string
 
-	// Content contains the post-body
+	// Content contains the post-body.
 	Content string
 
-	// The link to the post
+	// The link to the post.
 	Link string
 
 	// Date is when the post was created.
 	Date time.Time
 
-	// CommentData contains any blog-comments upon this entry
+	// CommentData contains any comments left upon this entry.
 	CommentData []BlogComment
 }
 
