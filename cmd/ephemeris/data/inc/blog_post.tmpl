@@ -2,7 +2,7 @@
   <h2 class="underlined"><a href="{{LOWER .Link}}" style="text-decoration:none; color:black;">{{.Title}}</a></h2>
   <p style="text-align:right; width:100%">{{BLOG_POST_DATE .Date}}</p>
   <div class="entry-content">{{.Content}}
-  <p style="text-align:right;width:100%">
+   <p style="text-align:right;width:100%">
     <span class="entry-category">
      {{ $length := len .Tags }} {{ if eq $length 0 }}
        No tags
@@ -18,6 +18,7 @@
       <a href="{{LOWER .Link}}#comments">{{len .CommentData}} comments</a>
      {{end}}
     </span>
-    </p>
+   </p>
+  </div>
 </div>
 <p>&nbsp;</p>
