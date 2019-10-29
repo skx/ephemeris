@@ -124,6 +124,11 @@ func loadTemplates() *template.Template {
 			return (html.EscapeString(in))
 		},
 
+		// Escape link name.
+		"ESCAPE_LINK": func(in string) string {
+			return (url.PathEscape(in))
+		},
+
 		// Convert a string to lower-case.
 		//
 		// This is used to make sure all links point to their

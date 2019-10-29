@@ -7,7 +7,7 @@
      {{ $length := len .Tags }} {{ if eq $length 0 }}
        No tags
      {{ else }}
-       Tags: {{range $i, $t := .Tags}}{{if $i}}, {{end}}<a href="/tags/{{ESCAPE .}}">{{ESCAPE .}}</a>{{end}}
+       Tags: {{range $i, $t := .Tags}}{{if $i}}, {{end}}<a href="/tags/{{ESCAPE_LINK .}}">{{ESCAPE .}}</a>{{end}}
      {{end}}
     </span>
     <span class="meta-sep">|</span>

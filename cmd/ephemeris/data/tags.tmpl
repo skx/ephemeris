@@ -23,7 +23,7 @@
         <td id="content">
        <h1>Tag Cloud</h1>
        {{range .Tags}}
-       <span style="font-size: {{.TSize}}px"><a href="/tags/{{ESCAPE .Tag}}" title="Used {{.Count}} times">{{ESCAPE .Tag}}</a></span>
+       <span style="font-size: {{.TSize}}px"><a href="/tags/{{ESCAPE_LINK .Tag}}" title="Used {{.Count}} times">{{ESCAPE .Tag}}</a></span>
        {{end}}
         </td>
         <td width="20%" id="sidebar">
