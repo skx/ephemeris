@@ -67,8 +67,8 @@ var RESOURCES = map[string]EmbeddedResource{
 
 	"data/inc/comments_on_blog_post.tmpl": {
 		Filename: "data/inc/comments_on_blog_post.tmpl",
-		Contents: "H4sIAAAAAAAC/3RRT2vCMBS/91M8wq5rh7uNtODUw0Dn2IQdJTbPJixNWBIVeeS7D631z9h66Uve7x+/EMGdQdtEBU8lGLSQj1zboo1jEQWkBESg14DfZ9wDpEQEaAJCShlXA9CyZHVHCwysaPHqXJ0EAzgLUekAaKPf80INqowIrUwpI/LCNnjjfhCXegu1ESGcBVmVAfxxr1BI9Mct8ChWBk+jr3iUsNMyqpI9DjpE/3HdNiBMLJmunWVXMFCoGxW7Ofi6ZET5S+1sSqxjbAL6+yOt4kWUZ10eZUWUDzdROX9scDSfzSavi+Xb/GOxHA8XE8jHImJKfOWLmzzABSiP64PbdP45eYd8qu3XwdOjKZl1a2eM27Hq154X4hKgT8OL6Puhb4QXUm//6XDl5L7rhyh/dnKf0oVx+vUv9hMAAP//NnRURzoCAAA=",
-		Length:   570,
+		Contents: "H4sIAAAAAAAC/3RQzYrbMBC++ykG0Wvtkt6KLEiTHApNU9jcg2KNLbGyxEpKQhj07sv6jwR2ffFo5vvjI4JvFl2XNPyqwaKDcuP7Hl3ayiQhZyAC0wK+LbgfkDMRoI0IORdcr8ComjUjLTJwsseHt5gEI3gHSZsI6FK480qvREGETuVcEAXpOnxy/xBX5gqNlTEugkwUAJ/sNUqFYbgCT/JscRqD4EnBzaika/ZzNSLmj5u+A2lTzUzjHXuAgUbT6TTOMTQ1Iyr/NN7lzEbGJWL4PtAEr5JadHlSgqhcX5L2YWhwc9jvd/+Op/+Hl+Npuz7uoNzKhDnzc6ie8hCZFsq/xr3mzCXogO1gPG4YBLQ1c7711vobE8uFV1LMXc4x5ky8SmEe5l54pcz1iybPXt3HlojK317dB82JMf1mr/cAAAD//7k4/rBAAgAA",
+		Length:   576,
 	},
 
 	"data/inc/css.tmpl": {

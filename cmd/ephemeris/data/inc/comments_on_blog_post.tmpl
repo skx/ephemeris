@@ -8,7 +8,7 @@
    <tr><td width="32">
            <img alt="icon" width="32" height="32" src="{{.Icon}}" alt="user-icon"></td>
        <td>{{.Author}} {{COMMENT_POST_DATE .Date}}<br/>
-            <a href="{{LOWER .Link}}" rel="nofollow">{{LOWER .Link}}</a>
+           {{if .Link}}<a href="{{.Link}}" rel="nofollow">{{.Link}}</a>{{end}}
        </td>
    </tr>
    </table>

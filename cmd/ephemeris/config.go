@@ -7,11 +7,10 @@ import (
 	"os"
 )
 
-// Config is the configuration object we use to guide our
-// generation.
+// Config is the configuration object we use to guide our generation.
 //
-// It is loaded from `ephemeris.json` when the application loads.
-//
+// This structure is populated from `ephemeris.json` when the application
+// is launched.
 type Config struct {
 	// Posts holds the directory beneath which we can find blog-posts.
 	Posts string

@@ -1,5 +1,5 @@
-// This is a proof of concept project to read/parse all the blog-files which
-// I have written, and generate a static-blog.
+// This is the driver for our blog-compiler, which will generate a static-blog
+// from a series of text-files.
 //
 // We use the `ephemeris` package to find the text-files beneath a given
 // root-directory, and then interate over them in various ways to build up:
@@ -862,7 +862,8 @@ func main() {
 	//
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	// Four routines
+	// We're going to wait for all our routines to be complete,
+	// fixed number here, as added below:
 	wg.Add(5)
 
 	//
