@@ -11,7 +11,7 @@ Ephemeris is a golang application which will generate a blog from a collection o
 * Tag-cloud.
 * RSS feed
 
-The project is very young, and written primarily to generate [my own blog](https://blog.steve.fi/), which was previously generated with the perl-based [chronicle blog compiler](https://steve.fi/Software/chronicle/).
+The project was primarily written to generate [my own blog](https://blog.steve.fi/), which was previously generated with the perl-based [chronicle blog compiler](https://steve.fi/Software/chronicle/).
 
 The chronicle blog compiler started life as a simple project, but grew in complexity over time.  Part of the reason the complexity grew was because the project was very flexible:
 
@@ -26,7 +26,7 @@ The chronicle blog compiler started life as a simple project, but grew in comple
 
 My expectation was that the use of an intermediary SQLite database would allow content to be generated in a very flexible and extensible fashion, however over time it became apparant that I didn't need things to be too flexible!
 
-In short this project was born to replace chronicle, and perform the things I actually need, rather than what I suspected I might enjoy.
+In short this project was born to __replace__ chronicle, and perform the things I actually need, rather than what I _suspected_ I might want.
 
 
 ## Chronicle Migration
@@ -36,7 +36,7 @@ There are some [brief notes on migration](MIGRATION.md) available.
 
 ## Installation
 
-You can install from source, by cloning the repository and runnign:
+You can install from source, by cloning the repository and running:
 
     cd ephemeris/cmd/ephemeris
     go build .
@@ -64,6 +64,7 @@ The generated output will be placed in the `output/` directory.  The configurati
 
 * `Posts`
   * This is the path to the directory containing your blog-posts.
+  * The input directory will be searched recursively.
 * `Comments`
   * This is the path to the directory containing your comments.
   * If this is empty then no comments will be read/inserted into your output
@@ -75,7 +76,7 @@ There is a command-line flag which lets you specify an alternative configuration
 
 ## Blog Format
 
-As with `chronicle` the input to this program is a directory containing a series of blog-posts.  Each post will be stored in a single file, with the entry being prefixed by a header containing meta-data.
+As with `chronicle` the input to this program is a directory tree containing a series of blog-posts.  Each post will be stored in a single file, with the entry being prefixed by a header containing meta-data.
 
 A sample post would look like this:
 
@@ -95,6 +96,17 @@ There are a few things to note here:
   * All my early posts were written in HTML.
   * Later I switched to markdown.
 
+As noted the input directory will be processed recursively, which allows you to group posts by topic, year, or in any other way you might prefer.  I personally file my entries by year:
+
+```
+data/
+  ├── 2005
+  ├── 2006
+  ..
+  ├── 2018
+  ├── 2019
+  └── 2020
+```
 
 ## Demo Blog
 
