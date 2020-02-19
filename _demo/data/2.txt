@@ -1,4 +1,5 @@
 Title: This is my second post
 Date: 12/10/2019 08:50
 
-<p>This is my second post, as you can see it has some content.  Since there is no "<code>Format:markdown</code>" header it is n HTML</p>
+<p>This is my second post, as you can see it has some content.  Since there is no "<code>Format:markdown</code>" header the body of the post is treated as HTML.</p>
+<p>HTML input is inserted into the output literally, without any escaping.</p>
