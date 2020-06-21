@@ -13,12 +13,12 @@ There are two changes in this project which you will have to adjust to:
 Each post will be stored in a single file, with the entry being prefixed by a header containing meta-data. A sample post would look like this:
 
 ```
-Subject: This is my post
-Date: DD/MM/YYYY HH:MM
+Tags: markdownshare, puppet, marionette, github, oodi, university
+Date: 07/04/2020 09:00
+Subject: A busy few days
 Format: markdown
-Tags: foo, bar baz
 
-This is my post
+Over the past few weeks things have been pretty hectic.
 ```
 
 There are a few things to note here:
@@ -31,14 +31,14 @@ There are a few things to note here:
 A related change is that it is now a __fatal-error__ for a blog-post to have a header-key which is unknown.  To provide a concrete example it was previously possible to write:
 
 ```
-Subject: This is my post
-Date: DD/MM/YYYY HH:MM
-Format: markdown
+Subject: I won't write another email client
+Tags: golang, email, maildir, maildir-utils
+Date: 08/01/2020 19:19
 Blah: foo
 Publish: later
-Tags: foo, bar baz
+Format: markdown
 
-This is my post
+Once upon a time I wrote an email client, in a combination of C++ and Lua.
 ```
 
 Now `Blah`, and `Publish` are explicitly prohibited.
@@ -65,6 +65,10 @@ So these examples would become:
 * `you_ve_had_this_coming_since_the_day_you_arrived.html.1227439239`
 * `you_ve_had_this_coming_since_the_day_you_arrived.html.1227442840`
 * `you_ve_had_this_coming_since_the_day_you_arrived.html.1227444255`
+
+See [COMMENTS.md](COMMENTS.md) for a discussion on comment-setup.
+
+
 
 
 ## Migration Summary

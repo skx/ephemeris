@@ -17,11 +17,15 @@
 
 # Ephemeris
 
-Ephemeris is a golang application which will generate a blog from a collection of static text-files, complete with:
+`ephemeris` is a golang cli-application which will generate a blog from a collection of static text-files, complete with:
 
 * Archive-view.
+* Comment support.
+  * See [COMMENTS.md](COMMENTS.md) for more details on the setup required.
 * Tag-cloud.
-* RSS feed
+* RSS feed.
+
+In short it is a static-site-generator, with a focus on blogging rather than being more general-purpose.
 
 The project was primarily written to generate [my own blog](https://blog.steve.fi/), which was previously generated with the perl-based [chronicle blog compiler](https://steve.fi/Software/chronicle/).
 
@@ -39,7 +43,7 @@ The chronicle blog compiler started life as a simple project, but grew in comple
     * For example outputting the front-page (10 most recent posts) & associated RSS-feed.
 * Once complete the SQLite database would be destroyed.
 
-My expectation was that the use of an intermediary SQLite database would allow content to be generated in a very flexible and extensible fashion, however over time it became apparant that I didn't need things to be too flexible!
+My expectation was that the use of an intermediary SQLite database would allow content to be generated in a very flexible and extensible fashion, however over time it became apparent that I didn't _actually_ need generation to be very flexible!  Most blogs look the same, if you have tags, archives, etc, then that's enough.
 
 In short this project was born to __replace__ chronicle, and perform the things I actually need, rather than what I _suspected_ I might want.
 
@@ -71,8 +75,8 @@ The application has only a couple of configuration values, which must be setup
 in the `ephemeris.json` file:
 
         {
-          "Posts":    "posts/",
-          "Comments": "/comments/",
+          "Posts":    "./posts/",
+          "Comments": "./comments/",
           "Prefix":   "http://blog.steve.fi/"
         }
 
@@ -85,9 +89,13 @@ The generated output will be placed in the `output/` directory.  The configurati
 * `Posts`
   * This is the path to the directory containing your blog-posts.
   * The input directory will be searched recursively.
+* `CommentAPI`
+  * The URL of the CGI script to receive comments, this is used in the add-comment form.
+    * See [COMMENTS.md](COMMENTS.md) for a discussion of comments.
 * `Comments`
   * This is the path to the directory containing your comments.
   * If this is empty then no comments will be read/inserted into your output
+  * See [COMMENTS.md](COMMENTS.md) for a discussion of comments.
 * `Prefix`
   * This is the URL-prefix used to generate all links.
 
@@ -95,19 +103,20 @@ There is a command-line flag which lets you specify an alternative configuration
 
 
 
+
 ## Blog Format
 
-As with `chronicle` the input to this program is a directory tree containing a series of blog-posts.  Each post will be stored in a single file, with the entry being prefixed by a header containing meta-data.
+The input to this program is a directory tree containing a series of blog-posts.  Each post will be stored in a single file, with the entry being prefixed by a header containing meta-data.
 
 A sample post would look like this:
 
 ```
-Subject: This is my post
-Date: DD/MM/YYYY HH:MM
+Tags: compilers, assembly, golang, brainfuck
+Date: 14/06/2020 19:00
+Subject: Writing a brainfuck compiler.
 Format: markdown
-Tags: foo, bar baz
 
-This is my post
+So last night I had the idea..
 ```
 
 There are a few things to note here:
@@ -154,6 +163,8 @@ Finally open http://localhost:8000 in your browser
 # Hacking
 
 Some brief notes on the theme/output generation are available in [HACKING.md](HACKING.md).
+
+
 
 
 # Feedback
