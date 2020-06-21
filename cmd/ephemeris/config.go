@@ -19,6 +19,10 @@ type Config struct {
 	// https://blog.steve.fi/
 	Prefix string
 
+	// CommentAPI holds the (CGI) endpoint to be used for submitting
+	// comments to, if that support is enabled.
+	CommentAPI string
+
 	// Comments points to a directory containing comment-files.
 	Comments string
 

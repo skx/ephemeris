@@ -678,6 +678,9 @@ func outputRSS(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) e
 }
 
 // Output one page for each entry.
+//
+// If comments are enabled then we'll add the comments to the entries,
+// and we'll ensure we setup the comment CGI path.
 func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntry) error {
 
 	mkdirIfMissing(config.OutputPath)
@@ -694,6 +697,9 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 		// Prefix for the site
 		Prefix string
 
+		// CGI link
+		CommentAPI string
+
 		// The recent posts for the sidebar.
 		RecentPosts []ephemeris.BlogEntry
 	}
@@ -702,9 +708,15 @@ func outputEntries(posts []ephemeris.BlogEntry, recentPosts []ephemeris.BlogEntr
 	// The data we use for output.
 	//
 	var pageData Recent
+
+	// The most recent posts
 	pageData.RecentPosts = recentPosts
 	pageData.AddComment = false
+
+	// The site prefix, and the link to the CGI form for
+	// comment-submission.
 	pageData.Prefix = config.Prefix
+	pageData.CommentAPI = config.CommentAPI
 
 	//
 	// Create a per-page output
