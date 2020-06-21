@@ -3,6 +3,18 @@
 [![license](https://img.shields.io/github/license/skx/ephemeris.svg)](https://github.com/skx/ephemeris/blob/master/LICENSE)
 [![Release](https://img.shields.io/github/release/skx/ephemeris.svg)](https://github.com/skx/ephemeris/releases/latest)
 
+
+* [Ephemeris](#ephemeris)
+  * [Chronicle History](#chronicle-history)
+  * [Chronicle Migration](#chronicle-migration)
+* [Installation](#installation)
+* [Blog Generation](#blog-generation)
+   * [Blog Format](#blog-format)
+* [Demo Blog](#demo-blog)
+* [Hacking](#hacking)
+* [Feedback](#feedback)
+
+
 # Ephemeris
 
 Ephemeris is a golang application which will generate a blog from a collection of static text-files, complete with:
@@ -12,6 +24,9 @@ Ephemeris is a golang application which will generate a blog from a collection o
 * RSS feed
 
 The project was primarily written to generate [my own blog](https://blog.steve.fi/), which was previously generated with the perl-based [chronicle blog compiler](https://steve.fi/Software/chronicle/).
+
+
+## Chronicle History
 
 The chronicle blog compiler started life as a simple project, but grew in complexity over time.  Part of the reason the complexity grew was because the project was very flexible:
 
@@ -29,12 +44,15 @@ My expectation was that the use of an intermediary SQLite database would allow c
 In short this project was born to __replace__ chronicle, and perform the things I actually need, rather than what I _suspected_ I might want.
 
 
+
 ## Chronicle Migration
 
 There are some [brief notes on migration](MIGRATION.md) available.
 
 
-## Installation
+
+
+# Installation
 
 You can install from source, by cloning the repository and running:
 
@@ -45,7 +63,9 @@ You can install from source, by cloning the repository and running:
 Or you can visit the [release page](https://github.com/skx/evalfilter/releases) to download a binary.
 
 
-## Blog Generation
+
+
+# Blog Generation
 
 The application has only a couple of configuration values, which must be setup
 in the `ephemeris.json` file:
@@ -72,6 +92,7 @@ The generated output will be placed in the `output/` directory.  The configurati
   * This is the URL-prefix used to generate all links.
 
 There is a command-line flag which lets you specify an alternative configuration-file, if you do not wish to use the default.  Run `ephemeris -help` to see details.
+
 
 
 ## Blog Format
@@ -108,7 +129,8 @@ data/
   └── 2020
 ```
 
-## Demo Blog
+
+# Demo Blog
 
 There is a demo-blog contained within this repository; to use it:
 
@@ -127,16 +149,17 @@ python -m SimpleHTTPServer 8000
 Finally open http://localhost:8000 in your browser
 
 
-## Feedback
+
+
+# Hacking
+
+Some brief notes on the theme/output generation are available in [HACKING.md](HACKING.md).
+
+
+# Feedback
 
 This project is not documented to my usual and preferred standard, no doubt it will improve over time.
 
 However there are many blog packages out there, so I expect this project will only be of interest to those wishing to switch from `chronicle`.
-
-
-## Hacking
-
-Some brief notes on the theme/output generation are available in [HACKING.md](HACKING.md).
-
 
 Steve
