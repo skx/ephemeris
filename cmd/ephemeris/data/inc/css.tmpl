@@ -15,16 +15,10 @@ dt { font-weight: bold; padding-top:5px; }
 .left { text-align:left; float:left; }
 .right{ float:right; text-align:right; }
 .centered{ text-align:center; }
-.underlined {width:100%; border-bottom: 1px solid silver; }
-.comment { border: 1px solid grey; margin-bottom:15px;}
+.underlined {max-width:100%; border-bottom: 1px solid silver; }
+.comment { border: 1px solid grey; margin-bottom:15px; width: 100%; }
 .commentheader{ border-bottom: 1px solid grey; }
 .commentbody { padding: 10px; }
-@media screen and (max-width: 500px) {
- .header a { float: none; display: block; text-align: left; }
- .header-right {float: none; }
- #sidebar { display: none; }
- #indent { display: none; }
-}
 pre {
     white-space: pre-wrap;       /* CSS 3 */
     white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
@@ -36,5 +30,13 @@ pre {
     border-width:   thin;
     padding: 5px  10px;
     display: inline-block;
+}
+
+@media (max-width: 600px) {
+ .header a { float: none; display: block; text-align: left; }
+ .header-right {float: none; }
+ #sidebar { display: none; }
+ #content { width: 100%; }
+ #indent { display: none; }
 }
 </style>
