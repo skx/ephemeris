@@ -15,7 +15,11 @@
      {{ $length := len .CommentData }} {{ if eq $length 0 }}
       No comments
      {{ else }}
+     {{ if eq $length 1 }}
+      <a href="{{LOWER .Link}}#comments">{{len .CommentData}} comment</a>
+     {{ else }}
       <a href="{{LOWER .Link}}#comments">{{len .CommentData}} comments</a>
+     {{end}}
      {{end}}
     </span>
    </p>

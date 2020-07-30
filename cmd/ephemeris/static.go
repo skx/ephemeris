@@ -61,8 +61,8 @@ var RESOURCES = map[string]EmbeddedResource{
 
 	"data/inc/blog_post.tmpl": {
 		Filename: "data/inc/blog_post.tmpl",
-		Contents: "H4sIAAAAAAAC/4STQW/aQBCF7/kVI5f2FGyaozGWUkBVVQRRg9Qj2tiDvcoy63qnadF2/nu1JiYpKsQXez1vvzd+O85K/ZRfAWT1DRRGOTeJflKJrdGEZZRnCuoWt5PI+8Xq+/wbxAtNjyIRON4bnESMv3lYYmFbxdpSSpZwDIU1tk0fjCoex1HufbzWbFAkS1SeJfVN59j8w1BGV5S2uqp5DL90yXX6cTR6H3Z/Wqw+b+5W9+vN7HY9h3imuGM1HabUT33nSNzuh4UlRuLOd3p4FrmCi46vDYMUMtcoOuEqxsq2+2cFeA8Dg1RxDekEDBLEa1U5EAklvQX8cRSM4NBCuJYWWFXuCEHj8FU5MFLwvlVUIQz0NQw4GHRwEe/1FgZa5Bq8RypFjmeUBGzi/fx+ens33yy+LL9CLBKCOLwKq3AEzxv7Dl4WWRI++z8J7JDV0GET5X/Oavr0dzskdhdSmh4kM8XqrbCWFnrgmbzOTei7l0a8P7UVOWJDHheD6Ocs6f6U/tbkH+jBNeOu+jcAAP//eb+BcEUDAAA=",
-		Length:   837,
+		Contents: "H4sIAAAAAAAC/6STQW/aQBCF7/kVI5f2FDDJ0RhLKaCqKoKoQeoRbezBXmWZdb3TtGg7/71aEwNNQ3KoL/Z6Z773/GadFvoxuwBIq2vIjXJuHP2gAhujCYsoSxVUDW7Gkffz5bfZVxjMNT2IROB4Z3AcMf7ifoG5bRRrSwlZwhHk1tgmuTcqfxhFmfeDlWaDImmssjSurlvF+i+GMrqkpNFlxSP4qQuukqvh8H3o/jhfflrfLu9W6+nNagaDqeKWVbeYQj92zpG42fVzS4zEre5k/yxyAa8qngqGUkhdregZVzGWttk9VYD30DNIJVeQjMEgwWClSgciYUtvAL8fCoawtxCuhQVWpTtA0Dg82Q6MBLxvFJUIPX0JPQ4CLVzEe72Bnha5BO+RCpHDjOKAjb2f3U1ubmfr+efFFxiIhCD2r8IqjOCpsXNwXKRx+OwXEtgiq77DOsp+n63p0t9ukdi9ktJkXzJVrN4Ka2GhA76c1z/NV8fmc4f33dGj988diXSKIakzQ/pPsjtFvz2K7qTH7b/a3ersA927etTu/gkAAP//grV23scDAAA=",
+		Length:   967,
 	},
 
 	"data/inc/comments_on_blog_post.tmpl": {
