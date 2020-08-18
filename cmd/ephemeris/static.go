@@ -91,8 +91,8 @@ var RESOURCES = map[string]EmbeddedResource{
 
 	"data/index.rss": {
 		Filename: "data/index.rss",
-		Contents: "H4sIAAAAAAAC/3SR0WvbMBDG3/VXCBf2Fp2dwlg8xWVrEhgrtMSDPavWORWVpUxS6gzj/33Icd2k2x519/3uu/vEb46Npi/ovLJmmWQsTW4Kwp2s8+1qQ+ix0cbnTtbL5CmEfQ7Qti1rr5l1O8gWiwWkc5jPZ07WM//bBHGcGX+VvIKymrj9wemBkhWgxgZN8JCxDCZxbcWbzVBilW0gliE9F1bWBDTh79HOx5EpNFYeNHoYhRP5fyIhBeHVkzAGNY3Xi0d7CMuk69iDw1od+z4pCA8qaCzKgC9Iv2Oz/3B1vfjs6VdtdxxOTcK1Ms/FGchhqBAu0VdO7YOypljhoxKGCiPpxiHS0tahFQ45nKsIVwEbXxA6fEmJvwrSdU6YHVK2NsEp9H1P6Kmt1bC6Q28PrsK4/d39z/WWsjtlnvs+gUijkRHhME3kMLpwGCP4p8uwy2U4l+OngLpuXd5+eVhT9iO+YwTvwrkAp4DG/8rRVFaiPJtze+pE7XsR4bLKpQjR9lt5/+ljmlG2EmGwfW2NN77dfzp/u9oU5E8AAAD//8Gx+ecEAwAA",
-		Length:   772,
+		Contents: "H4sIAAAAAAAC/3SRUWvbPhTF3/UphAv/t+jGKfxZPMVlaxIYK7TEgz2r1nUqKkuZJNcZxt99yHHdpN0efc859x7/xG+OtaYv6LyyZpWkbJ7c5IQ7WWW79ZbQY62Nz5ysVslTCIcMoG1b1l4z6/aQLpdLmC9gsZg5Wc38bxPEcWb8VfIalOWUOzRODylZAmqs0QQPKUthMldWvJ0ZRqy0NcQxzM+NpTUBTfi42vm4cg61lY1GD6NxSv47kZCc8PJJGIOaxr8Xj7YJq6Tr2IPDSh37PskJDypozIuAL0i/Y3347+p6+dnTr9ruOZxEwrUyz/lZkMMwIVyiL506BGVNvsZHJQwVRtKtQ6SFrUIrHHI4dxGuAtY+J3R4kgJ/5aTrnDB7pGxjglPo+57Qk6zVUN2ht40rMba/u/+52VF2p8xz3ycQ02hkjHCYNnIYr3AYEfz1ytDlEs7l+glQ122K2y8PG8p+xO+I4B2ci+AEaN8o+VEcpoSPj5mhKa1EeXbk9qRE73sT4bLMpAix07fi/tP/85SytQhDp1dpBPAG58Rmt97m5E8AAAD//3RURUIhAwAA",
+		Length:   801,
 	},
 
 	"data/index.tmpl": {

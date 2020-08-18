@@ -22,6 +22,7 @@
 <item rdf:about="{{LOWER .Link}}">
 <title>{{ESCAPE .Title}}</title>
 <link>{{LOWER .Link}}</link>
+<guid>{{LOWER .Link}}</guid>
 <content:encoded>{{ESCAPE .Content}}</content:encoded>
 <dc:date>{{ISO8601 .Date}}</dc:date>
 </item>
