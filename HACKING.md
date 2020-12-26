@@ -7,12 +7,10 @@ If you wish to change the look/feel of the generated file you'll need to look in
 
 ## Making Changes
 
-To make a change requires three steps:
+Making a change to the templates requires two steps:
 
-* Make a change to the template/templates you wish.
-* Regenerate the compiled version of the templates.
-  * This uses the [implant](https://github.com/skx/implant) utility.
-* Rebuild the application with the compiled version.
+* Make a change to the template/templates you wish to modify.
+* Rebuild the application to make those changes available at runtime.
 
 To get started visit the main application directory:
 
@@ -22,12 +20,10 @@ Make your change(s) to the files beneath `data/`:
 
     vi data/index.tmpl
 
-These files are not read directly, instead their contents are compiled into the file `static.go`.  You need to regenerate that file to see your changes reflected, once you rebuild the application.
+Now rebuild the application:
 
-So you should run:
-
-    implant
     go build .
-    [go install .]
 
-That will ensure that the file `static.go` contains updated versions of the templates from beneath `data/` and the compiler has been rebuilt with an updated copy of them.
+Finally you can regenerate your blog with the updated templates:
+
+    ephemeris [args]
