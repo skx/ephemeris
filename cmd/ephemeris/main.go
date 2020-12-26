@@ -18,11 +18,13 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
 	"html"
 	"net/url"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
 	"sort"
@@ -35,6 +37,13 @@ import (
 )
 
 //
+// Embedded template-resources
+//
+
+//go:embed data/**
+var TEMPLATES embed.FS
+
+//
 // Variables which are reused live here.
 //
 
@@ -44,6 +53,9 @@ import (
 // We load each of these as golang templates here, so that they
 // are globally available and we don't have to re-read/re-parse them
 // more than once.
+//
+// These are stored as part of the build-process, in the `TEMPLATES`
+// variable above.
 var tmpl *template.Template
 
 // We load a JSON configuration file when we launch, which contains
@@ -96,7 +108,7 @@ func getRecentPosts(posts []ephemeris.BlogEntry, count int) []ephemeris.BlogEntr
 }
 
 // loadTemplates returns a collection of all the templates we have
-// embedded within our `static.go` file.
+// embedded within our application.
 //
 // In addition to loading the templates we also populate a function-map,
 // to allow various functions to be made available to all templates.
@@ -109,7 +121,7 @@ func getRecentPosts(posts []ephemeris.BlogEntry, count int) []ephemeris.BlogEntr
 // RECENT_POST_DATE - The date format used for the "most recent entries" list in the sidebar.
 // BLOG_POST_DATE   - The format used in the index/archive/tag-view.
 //
-func loadTemplates() *template.Template {
+func loadTemplates() (*template.Template, error) {
 
 	// Create a helper-template, with no name.
 	t := template.New("").Funcs(template.FuncMap{
@@ -157,24 +169,61 @@ func loadTemplates() *template.Template {
 		},
 	})
 
-	// Add in each static-file
-	for _, entry := range getResources() {
+	//
+	// Open our embedded tree - handling both subdirectories
+	//
+	inp := []string{"data", "data/inc"}
+	for _, pth := range inp {
 
-		// Get the data.
-		data, err := getResource(entry.Filename)
+		//
+		// Read the contents of the directory
+		//
+		fis, err := TEMPLATES.ReadDir(pth)
 		if err != nil {
-			fmt.Printf("Error getting resource %s - %s\n", entry.Filename, err.Error())
+			return nil, err
 		}
 
-		// Add the data
-		t = t.New(entry.Filename)
-		t, err = t.Parse(string(data))
-		if err != nil {
-			fmt.Printf("Error parsing template resource %s - %s\n", entry.Filename, err.Error())
+		//
+		// For each embedded resource
+		//
+		for _, fi := range fis {
+
+			//
+			// Skip non-files.  This works because
+			// we have:
+			//
+			//   data/foo.bar
+			//   data/foo.tmpl
+			//   data/inc
+			//   data/inc/blah.blah
+			//
+			// Only the third entry there `data/inc` is a directory
+			// and contains no period in its name.
+			//
+			if !strings.Contains(fi.Name(), ".") {
+				continue
+			}
+
+			//
+			// Get the contents of the file.
+			//
+			data, err := TEMPLATES.ReadFile(path.Join(pth, fi.Name()))
+			if err != nil {
+				return nil, err
+			}
+
+			//
+			// Add the data + template
+			//
+			t = t.New(path.Join(pth, fi.Name()))
+			t, err = t.Parse(string(data))
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
-	return t
+	return t, nil
 }
 
 // outputTags writes out the tag-specific pages.
@@ -852,7 +901,11 @@ func main() {
 	// Our templates are loaded en masse, and each one of them
 	// has some (custom/bonus/extra) functions available to them.
 	//
-	tmpl = loadTemplates()
+	tmpl, err = loadTemplates()
+	if err != nil {
+		fmt.Printf("Error loading embedded resources: %s\n", err.Error())
+		return
+	}
 
 	//
 	// We have a list of "recent" posts, which will be embedded in
