@@ -66,7 +66,7 @@ You can install from source, by cloning the repository and running:
 
 Or you can visit the [release page](https://github.com/skx/evalfilter/releases) to download a binary.
 
-**NOTE**: As a result of #16 you'll need to use golang version 1.16beta1 or higher.
+**NOTE**: As a result of #16 you'll need to use golang version 1.16 or higher.
 
 
 # Blog Generation
