@@ -1,6 +1,6 @@
 module github.com/skx/ephemeris
 
-go 1.12
+go 1.16
 
 require (
 	github.com/microcosm-cc/bluemonday v1.0.4 // indirect
