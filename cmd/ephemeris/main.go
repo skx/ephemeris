@@ -40,6 +40,7 @@ import (
 // Embedded template-resources
 //
 
+// TEMPLATES holds our embedded template resources.
 //go:embed data/**
 var TEMPLATES embed.FS
 
